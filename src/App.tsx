@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Analytics } from "@vercel/analytics/react"
 
 type Format = 'grayscale' | 'rgb' | 'rgba';
 
@@ -135,166 +136,169 @@ const App: React.FC = () => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      minHeight: '100vh',
-      padding: '40px',
-      backgroundColor: '#f9f9f9',
-      fontFamily: 'Arial, sans-serif',
-    }}>
-      <h1 style={{ marginBottom: '30px', fontSize: '32px', color: '#333' }}>
-        Raw Image Converter
-      </h1>
-
-      <div
-  onDragOver={handleDragOver}
-  onDragLeave={handleDragLeave}
-  onDrop={handleDrop}
-  style={{
-    backgroundColor: isDragging ? '#e0f7fa' : '#fff',
-    border: isDragging ? '2px dashed #00acc1' : '2px dashed #ccc',
-    padding: '30px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    width: '100%',
-    maxWidth: '500px',
-    textAlign: 'center',
-    marginBottom: '30px'
-  }}
->
-  <p style={{ marginBottom: '10px', fontWeight:'bold' }}>
-    Drag & Drop RAW file here
-  </p>
-  <p>or</p>
-
-  {/* 숨긴 파일 인풋 */}
-  <input
-    type="file"
-    accept=".raw"
-    id="fileInput"
-    style={{ display: 'none' }}
-    onChange={handleFileChange}
-  />
-
-  {/* 커스텀 파일 선택 버튼 */}
-  <label
-    htmlFor="fileInput"
-    style={{
-      display: 'inline-block',
-      padding: '10px 20px',
-      backgroundColor: '#4CAF50',
-      color: 'white',
-      borderRadius: '4px',
-      cursor: 'pointer',
-    }}
-  >
-    Choose File
-  </label>
-
-  {/* 선택된 파일 이름 별도 표시 */}
-  {file && (
-    <div style={{ marginTop: '10px', fontSize: '14px', color: '#555' }}>
-      Selected file: <strong>{file.name}</strong>
-    </div>
-  )}
-</div>
-
-
-
+    <>
+      <Analytics />
       <div style={{
-        backgroundColor: '#fff',
-        padding: '30px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        width: '100%',
-        maxWidth: '500px',
-        textAlign: 'center'
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        minHeight: '100vh',
+        padding: '40px',
+        backgroundColor: '#f9f9f9',
+        fontFamily: 'Arial, sans-serif',
       }}>
-        <div style={{ marginBottom: '20px' }}>
-          <select
-            value={format}
-            onChange={handleFormatChange}
-            style={{
-              padding: '8px',
-              marginBottom: '20px',
-              borderRadius: '4px',
-              border: '1px solid #ccc'
-            }}
-          >
-            <option value="grayscale">Grayscale (1 byte per pixel)</option>
-            <option value="rgb">RGB (3 bytes per pixel)</option>
-            <option value="rgba">RGBA (4 bytes per pixel)</option>
-          </select>
-        </div>
+        <h1 style={{ marginBottom: '30px', fontSize: '32px', color: '#333' }}>
+          Raw Image Converter
+        </h1>
 
-        <div style={{ marginBottom: '20px' }}>
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          style={{
+            backgroundColor: isDragging ? '#e0f7fa' : '#fff',
+            border: isDragging ? '2px dashed #00acc1' : '2px dashed #ccc',
+            padding: '30px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            width: '100%',
+            maxWidth: '500px',
+            textAlign: 'center',
+            marginBottom: '30px'
+          }}
+        >
+          <p style={{ marginBottom: '10px', fontWeight: 'bold' }}>
+            Drag & Drop RAW file here
+          </p>
+          <p>or</p>
+
+          {/* 숨긴 파일 인풋 */}
           <input
-            type="number"
-            placeholder="Width"
-            value={width}
-            onChange={handleWidthChange}
-            style={{
-              width: '100px',
-              padding: '8px',
-              marginRight: '10px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
+            type="file"
+            accept=".raw"
+            id="fileInput"
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
           />
-          <input
-            type="number"
-            placeholder="Height"
-            value={height}
-            onChange={handleHeightChange}
-            style={{
-              width: '100px',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
-          />
-        </div>
 
-        <div style={{ marginBottom: '20px' }}>
-          <canvas
-            ref={canvasRef}
-            style={{ border: '1px solid #ccc', maxWidth: '100%', height: 'auto' }}
-          />
-        </div>
-
-        <div>
-          <button
-            onClick={() => handleDownload('png')}
+          {/* 커스텀 파일 선택 버튼 */}
+          <label
+            htmlFor="fileInput"
             style={{
+              display: 'inline-block',
+              padding: '10px 20px',
               backgroundColor: '#4CAF50',
               color: 'white',
-              padding: '10px 20px',
-              marginRight: '10px',
-              border: 'none',
               borderRadius: '4px',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
-            Download as PNG
-          </button>
-          <button
-            onClick={() => handleDownload('jpeg')}
-            style={{
-              backgroundColor: '#2196F3',
-              color: 'white',
-              padding: '10px 20px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Download as JPG
-          </button>
+            Choose File
+          </label>
+
+          {/* 선택된 파일 이름 별도 표시 */}
+          {file && (
+            <div style={{ marginTop: '10px', fontSize: '14px', color: '#555' }}>
+              Selected file: <strong>{file.name}</strong>
+            </div>
+          )}
+        </div>
+
+
+
+        <div style={{
+          backgroundColor: '#fff',
+          padding: '30px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          width: '100%',
+          maxWidth: '500px',
+          textAlign: 'center'
+        }}>
+          <div style={{ marginBottom: '20px' }}>
+            <select
+              value={format}
+              onChange={handleFormatChange}
+              style={{
+                padding: '8px',
+                marginBottom: '20px',
+                borderRadius: '4px',
+                border: '1px solid #ccc'
+              }}
+            >
+              <option value="grayscale">Grayscale (1 byte per pixel)</option>
+              <option value="rgb">RGB (3 bytes per pixel)</option>
+              <option value="rgba">RGBA (4 bytes per pixel)</option>
+            </select>
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <input
+              type="number"
+              placeholder="Width"
+              value={width}
+              onChange={handleWidthChange}
+              style={{
+                width: '100px',
+                padding: '8px',
+                marginRight: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '4px'
+              }}
+            />
+            <input
+              type="number"
+              placeholder="Height"
+              value={height}
+              onChange={handleHeightChange}
+              style={{
+                width: '100px',
+                padding: '8px',
+                border: '1px solid #ccc',
+                borderRadius: '4px'
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <canvas
+              ref={canvasRef}
+              style={{ border: '1px solid #ccc', maxWidth: '100%', height: 'auto' }}
+            />
+          </div>
+
+          <div>
+            <button
+              onClick={() => handleDownload('png')}
+              style={{
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                padding: '10px 20px',
+                marginRight: '10px',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Download as PNG
+            </button>
+            <button
+              onClick={() => handleDownload('jpeg')}
+              style={{
+                backgroundColor: '#2196F3',
+                color: 'white',
+                padding: '10px 20px',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Download as JPG
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
